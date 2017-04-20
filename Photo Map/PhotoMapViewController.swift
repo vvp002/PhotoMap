@@ -45,9 +45,6 @@ class PhotoMapViewController: UIViewController, MKMapViewDelegate, UIImagePicker
         let vc = UIImagePickerController()
         vc.delegate = self
         vc.allowsEditing = true
-        vc.sourceType = UIImagePickerControllerSourceType.camera
-        
-        self.present(vc, animated: true, completion: nil)
         
         if UIImagePickerController.isSourceTypeAvailable(.camera) {
             print("Camera is available")
@@ -56,16 +53,17 @@ class PhotoMapViewController: UIViewController, MKMapViewDelegate, UIImagePicker
             print("Camera not available so we will use photo library instead")
             vc.sourceType = .photoLibrary
         }
+        
+        self.present(vc, animated: true, completion: nil)
     }
     
     func imagePickerController(_ picker: UIImagePickerController,
                                didFinishPickingMediaWithInfo info: [String : Any]) {
         // Get the image captured by the UIImagePickerController
         let originalImage = info[UIImagePickerControllerOriginalImage] as! UIImage
-        let editedImage = info[UIImagePickerControllerEditedImage] as! UIImage
-        
+
         // Do something with the images (based on your use case)
-        pickedImage = editedImage
+        pickedImage = originalImage
         
         // Dismiss UIImagePickerController to go back to your original view controller
         dismiss(animated: true, completion: nil)
@@ -73,18 +71,18 @@ class PhotoMapViewController: UIViewController, MKMapViewDelegate, UIImagePicker
         performSegue(withIdentifier: "tagSegue", sender: nil)
     }
     
-    func addPin() {
+    func addPin(controller: LocationsViewController, latitude: NSNumber, longitude: NSNumber) {
         
         //Edit for later
         let annotation = MKPointAnnotation()
-        let locationCoordinate = CLLocationCoordinate2D(latitude: 37.779560, longitude: -122.393027)
+        let locationCoordinate = CLLocationCoordinate2D(latitude: CLLocationDegrees(latitude), longitude: CLLocationDegrees(longitude))
         annotation.coordinate = locationCoordinate
-        annotation.title = String(describing: annotation.coordinate.latitude)
+        annotation.title = String(describing: latitude)
         mapView.addAnnotation(annotation)
     }
     
     func locationsPickedLocation(controller: LocationsViewController, latitude: NSNumber, longitude: NSNumber) {
-        
+        addPin(controller: controller, latitude: latitude, longitude: longitude)
     }
 
 
