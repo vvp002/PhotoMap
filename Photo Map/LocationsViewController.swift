@@ -65,7 +65,7 @@ class LocationsViewController: UIViewController, UITableViewDelegate, UITableVie
         print(latString + " " + lngString)
         
         delegate.locationsPickedLocation(controller: self, latitude: lat, longitude: lng)
-        
+                
         // Return to the PhotoMapViewController
         navigationController?.popViewController(animated: true)
     }
